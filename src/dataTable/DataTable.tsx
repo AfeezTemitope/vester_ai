@@ -9,35 +9,40 @@ interface SlideData {
     slide_metadata: Record<string, unknown>;
 }
 
-const DataTable: React.FC = () => {
+interface DataTableProps {
+    shouldFetchData: boolean;
+}
+
+const DataTable: React.FC<DataTableProps> = ({ shouldFetchData }) => {
     const [slides, setSlides] = useState<SlideData[]>([]);
     const [modalMessage, setModalMessage] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const apiUrl = import.meta.env.API || "http://127.0.0.1:5000/";
 
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/data');
+            const response = await fetch(`${apiUrl}data`);
             if (!response.ok) {
-                throw new Error('Failed to fetch data. Please try again later.');
+                throw new Error('Failed to fetch data');
             }
             const result = await response.json();
-
             if (!Array.isArray(result)) {
-                throw new Error('Invalid data format: expected an array of slides.');
+                throw new Error('Invalid data format');
             }
-
             setSlides(result);
         } catch (error) {
-            setModalMessage(error instanceof Error ? error.message : 'Something went wrong. Please try again later.');
+            setModalMessage(error instanceof Error ? error.message : 'Something went wrong');
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (shouldFetchData) {
+            fetchData();
+        }
+    }, [shouldFetchData]);
 
     const closeModal = () => {
         setModalMessage(null);
@@ -64,7 +69,7 @@ const DataTable: React.FC = () => {
                                 <td>{slide.filename}</td>
                                 <td>{slide.slide_title}</td>
                                 <td>{slide.slide_content}</td>
-                                <td>{JSON.stringify(slide.slide_metadata)}</td>
+                                <td>{JSON.stringify(slide.slide_metadata, null, 2)}</td>
                             </tr>
                         ))
                     ) : (

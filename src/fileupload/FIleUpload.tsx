@@ -10,6 +10,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
     const [file, setFile] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string | null>(null);
+    const apiUrl = import.meta.env.API || "http://127.0.0.1:5000/"
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -31,7 +32,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
         try {
             setIsLoading(true);
 
-            const uploadResponse = await fetch('http://localhost:5000/upload', {
+            const uploadResponse = await fetch(`${apiUrl}upload`, {
                 method: 'POST',
                 body: formData,
             });
