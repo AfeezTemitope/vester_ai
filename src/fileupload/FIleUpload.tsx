@@ -10,7 +10,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
     const [file, setFile] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string | null>(null);
-    const apiUrl = import.meta.env.API || "http://127.0.0.1:5000/"
+    const apiUrl = import.meta.env.VITE_API || "http://localhost:5000/"
+    console.log(apiUrl)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {

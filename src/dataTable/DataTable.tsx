@@ -17,8 +17,8 @@ const DataTable: React.FC<DataTableProps> = ({ shouldFetchData }) => {
     const [slides, setSlides] = useState<SlideData[]>([]);
     const [modalMessage, setModalMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const apiUrl = import.meta.env.API || "http://127.0.0.1:5000/";
-
+    const apiUrl = import.meta.env.VITE_API || "http://localhost:5000/"
+    console.log(apiUrl)
     const fetchData = async () => {
         setIsLoading(true);
         try {
